@@ -1,0 +1,9 @@
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+
+xunjieapi:
+  client:
+    access-key: yupi
+    secret-key: abcdefgh

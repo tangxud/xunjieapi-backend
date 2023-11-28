@@ -1,6 +1,5 @@
 package com.txd.project.mapper;
 
-import com.txd.project.model.entity.Post;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;

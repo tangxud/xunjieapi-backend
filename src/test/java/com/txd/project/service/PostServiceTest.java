@@ -2,7 +2,7 @@ package com.txd.project.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.txd.project.model.dto.post.PostQueryRequest;
-import com.txd.project.model.entity.Post;
+
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

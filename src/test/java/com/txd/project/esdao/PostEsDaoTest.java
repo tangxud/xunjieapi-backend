@@ -2,8 +2,7 @@ package com.txd.project.esdao;
 
 import com.txd.project.model.dto.post.PostEsDTO;
 import com.txd.project.model.dto.post.PostQueryRequest;
-import com.txd.project.model.entity.Post;
-import com.txd.project.service.PostService;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
