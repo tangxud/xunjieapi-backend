@@ -3,10 +3,7 @@ package com.txd.project.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
 import com.txd.project.annotation.AuthCheck;
-import com.txd.project.common.BaseResponse;
-import com.txd.project.common.DeleteRequest;
-import com.txd.project.common.ErrorCode;
-import com.txd.project.common.ResultUtils;
+import com.txd.project.common.*;
 import com.txd.project.constant.UserConstant;
 import com.txd.project.exception.BusinessException;
 import com.txd.project.exception.ThrowUtils;
@@ -18,6 +15,7 @@ import com.txd.project.model.entity.User;
 import com.txd.project.model.vo.InterfaceInfoVO;
 import com.txd.project.service.InterfaceInfoService;
 import com.txd.project.service.UserService;
+import com.txd.xunjieapiclientsdk.client.XJApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +37,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private XJApiClient xjApiClient;
 
     private final static Gson GSON = new Gson();
 
@@ -117,6 +118,58 @@ public class InterfaceInfoController {
     }
 
     /**
+     * 发布接口（仅管理员）
+     *
+     * @param idRequest
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = idRequest.getId();
+        // 1.判断接口是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+
+        // 2.判断接口是否可以调用
+        com.txd.xunjieapiclientsdk.model.User user = new com.txd.xunjieapiclientsdk.model.User();
+        user.setUserName("shihao");
+        String nameByPost = xjApiClient.getNameByUser(user);
+        ThrowUtils.throwIf(nameByPost == null, ErrorCode.SYSTEM_ERROR, "接口验证失败");
+
+        // 3.将接口状态修改为1（发布状态）
+        oldInterfaceInfo.setStatus(1);
+        boolean result = interfaceInfoService.updateById(oldInterfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 下线接口（仅管理员）
+     *
+     * @param idRequest
+     * @return
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = idRequest.getId();
+        // 1.判断接口是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+
+        // 2.将接口状态修改为0（下线状态）
+        oldInterfaceInfo.setStatus(0);
+        boolean result = interfaceInfoService.updateById(oldInterfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
      * 根据 id 获取
      *
      * @param id
@@ -133,6 +186,8 @@ public class InterfaceInfoController {
         }
         return ResultUtils.success(interfaceInfoService.getInterfaceInfoVO(interfaceInfo, request));
     }
+
+
 
     /**
      * 分页获取列表（封装类）
