@@ -8,10 +8,12 @@ import com.txd.project.constant.UserConstant;
 import com.txd.project.exception.BusinessException;
 import com.txd.project.exception.ThrowUtils;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoAddRequest;
+import com.txd.project.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.txd.project.model.entity.InterfaceInfo;
 import com.txd.project.model.entity.User;
+import com.txd.project.model.enums.InterfaceInfoStatusEnum;
 import com.txd.project.model.vo.InterfaceInfoVO;
 import com.txd.project.service.InterfaceInfoService;
 import com.txd.project.service.UserService;
@@ -167,6 +169,35 @@ public class InterfaceInfoController {
         oldInterfaceInfo.setStatus(0);
         boolean result = interfaceInfoService.updateById(oldInterfaceInfo);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 调用接口
+     *
+     * @param interfaceInfoInvokeRequest
+     * @return
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest, HttpServletRequest request) {
+        if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = interfaceInfoInvokeRequest.getId();
+        // 获取用户请求参数
+        String userRequestParams = interfaceInfoInvokeRequest.getUserRequestParams();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        // 判断接口是否存在
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ErrorCode.NOT_FOUND_ERROR, "接口不存在");
+
+        // 判断接口是否开启
+        ThrowUtils.throwIf(oldInterfaceInfo.getStatus() == InterfaceInfoStatusEnum.OFFLINE.getValue(), new BusinessException(ErrorCode.PARAMS_ERROR, "接口已关闭"));
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        XJApiClient userApiClient = new XJApiClient(accessKey, secretKey);
+        com.txd.xunjieapiclientsdk.model.User user = GSON.fromJson(userRequestParams, com.txd.xunjieapiclientsdk.model.User.class);
+        String nameByPost = userApiClient.getNameByPost(user.getUserName());
+        return ResultUtils.success(nameByPost);
     }
 
     /**
