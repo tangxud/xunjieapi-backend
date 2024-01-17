@@ -1,9 +1,9 @@
 package com.txd.project.aop;
 
+import com.txd.common.core.model.entity.User;
 import com.txd.project.annotation.AuthCheck;
 import com.txd.project.common.ErrorCode;
 import com.txd.project.exception.BusinessException;
-import com.txd.project.model.entity.User;
 import com.txd.project.model.enums.UserRoleEnum;
 import com.txd.project.service.UserService;
 import javax.annotation.Resource;

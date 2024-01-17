@@ -1,7 +1,7 @@
 package com.txd.project.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.txd.project.model.entity.InterfaceInfo;
+import com.txd.common.core.model.entity.InterfaceInfo;
 
 /**
 * @author tangx

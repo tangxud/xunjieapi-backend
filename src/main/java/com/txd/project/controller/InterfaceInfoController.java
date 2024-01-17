@@ -2,6 +2,8 @@ package com.txd.project.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
+import com.txd.common.core.model.entity.InterfaceInfo;
+import com.txd.common.core.model.entity.User;
 import com.txd.project.annotation.AuthCheck;
 import com.txd.project.common.*;
 import com.txd.project.constant.UserConstant;
@@ -11,8 +13,6 @@ import com.txd.project.model.dto.interfaceInfo.InterfaceInfoAddRequest;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
-import com.txd.project.model.entity.InterfaceInfo;
-import com.txd.project.model.entity.User;
 import com.txd.project.model.enums.InterfaceInfoStatusEnum;
 import com.txd.project.model.vo.InterfaceInfoVO;
 import com.txd.project.service.InterfaceInfoService;

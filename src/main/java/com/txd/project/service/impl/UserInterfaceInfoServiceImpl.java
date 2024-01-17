@@ -1,18 +1,12 @@
 package com.txd.project.service.impl;
-import java.util.Date;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.txd.common.core.model.entity.UserInterfaceInfo;
 import com.txd.project.common.ErrorCode;
 import com.txd.project.exception.BusinessException;
-import com.txd.project.model.dto.userInterfaceInfo.UserInterfaceInfoQueryRequest;
-import com.txd.project.model.entity.InterfaceInfo;
-import com.txd.project.model.entity.UserInterfaceInfo;
 import com.txd.project.service.UserInterfaceInfoService;
 import com.txd.project.mapper.UserInterfaceInfoMapper;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**

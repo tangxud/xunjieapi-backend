@@ -2,9 +2,9 @@ package com.txd.project.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.txd.common.core.model.entity.InterfaceInfo;
 import com.txd.project.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.txd.project.model.entity.InterfaceInfo;
 import com.txd.project.model.vo.InterfaceInfoVO;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,6 +1,5 @@
 package com.txd.project.service;
 
-import com.txd.project.model.entity.User;
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

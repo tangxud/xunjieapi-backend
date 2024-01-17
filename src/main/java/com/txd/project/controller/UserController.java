@@ -1,6 +1,7 @@
 package com.txd.project.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.txd.common.core.model.entity.User;
 import com.txd.project.annotation.AuthCheck;
 import com.txd.project.common.BaseResponse;
 import com.txd.project.common.DeleteRequest;
@@ -15,7 +16,6 @@ import com.txd.project.model.dto.user.UserQueryRequest;
 import com.txd.project.model.dto.user.UserRegisterRequest;
 import com.txd.project.model.dto.user.UserUpdateMyRequest;
 import com.txd.project.model.dto.user.UserUpdateRequest;
-import com.txd.project.model.entity.User;
 import com.txd.project.model.vo.LoginUserVO;
 import com.txd.project.model.vo.UserVO;
 import com.txd.project.service.UserService;

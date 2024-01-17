@@ -2,8 +2,8 @@ package com.txd.project.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.txd.common.core.model.entity.User;
 import com.txd.project.model.dto.user.UserQueryRequest;
-import com.txd.project.model.entity.User;
 import com.txd.project.model.vo.LoginUserVO;
 import com.txd.project.model.vo.UserVO;
 import java.util.List;

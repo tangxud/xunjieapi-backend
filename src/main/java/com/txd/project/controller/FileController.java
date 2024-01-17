@@ -1,6 +1,7 @@
 package com.txd.project.controller;
 
 import cn.hutool.core.io.FileUtil;
+import com.txd.common.core.model.entity.User;
 import com.txd.project.common.BaseResponse;
 import com.txd.project.common.ErrorCode;
 import com.txd.project.common.ResultUtils;
@@ -8,7 +9,6 @@ import com.txd.project.constant.FileConstant;
 import com.txd.project.exception.BusinessException;
 import com.txd.project.manager.CosManager;
 import com.txd.project.model.dto.file.UploadFileRequest;
-import com.txd.project.model.entity.User;
 import com.txd.project.model.enums.FileUploadBizEnum;
 import com.txd.project.service.UserService;
 import java.io.File;
