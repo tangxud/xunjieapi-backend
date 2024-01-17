@@ -45,10 +45,5 @@ public class InterfaceInfoAddRequest implements Serializable {
      */
     private String method;
 
-    /**
-     * 是否删除(0-未删, 1-已删)
-     */
-    private Integer isDelete;
-
     private static final long serialVersionUID = 1L;
 }
