@@ -21,4 +21,12 @@
         totalNum,leftNum,`status`,
         createTime,updateTime,isDelete
     </sql>
+    
+    <select id="listTopInvokeInterfaceInfo" resultMap="BaseResultMap">
+        select interfaceInfoId , sum(totalNum) as totalNum
+        from xunjieapi.user_interface_info
+        group by interfaceInfoId
+        order by totalNum desc
+        limit #{limit};
+    </select>
 </mapper>

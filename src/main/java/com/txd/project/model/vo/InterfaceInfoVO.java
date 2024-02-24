@@ -1,10 +1,10 @@
 package com.txd.project.model.vo;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.google.gson.Gson;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 接口视图
@@ -83,6 +83,11 @@ public class InterfaceInfoVO implements Serializable {
      * 创建人信息
      */
     private UserVO user;
+
+    /**
+     * 接口总调用次数
+     */
+    private long totalNum;
 
     private static final long serialVersionUID = 1L;
 }
