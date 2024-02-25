@@ -97,17 +97,17 @@ public class UserController {
 
     /**
      * 用户短信登录
-     * @param userLoginRequest
+     * @param userPhoneLoginRequest
      * @param request
      * @return
      */
     @PostMapping("/loginWithSms")
-    public BaseResponse<LoginUserVO> loginWithSms(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
-        if (userLoginRequest == null) {
+    public BaseResponse<LoginUserVO> loginWithSms(@RequestBody UserPhoneLoginRequest userPhoneLoginRequest, HttpServletRequest request) {
+        if (userPhoneLoginRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String phone = userLoginRequest.getPhone();
-        String captcha = userLoginRequest.getCaptcha();
+        String phone = userPhoneLoginRequest.getPhone();
+        String captcha = userPhoneLoginRequest.getCaptcha();
         if (StringUtils.isAnyBlank(phone, captcha)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
