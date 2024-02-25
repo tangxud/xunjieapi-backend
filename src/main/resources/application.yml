@@ -79,4 +79,12 @@ dubbo:
     id: nacos-registry
     address: nacos://localhost:8848
 
+aliyun:
+  accessKeyId: LTAI5t9Vo8KAesnPLKMKSiCL
+  accessKeySecret: eeuVSDxt1qn4P5j6IS2afaSeqDNJC4
+  region: cn-hangzhou
+  signName: 迅捷API
+  templateCode: SMS_465370158
+
+
 

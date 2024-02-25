@@ -1,7 +1,5 @@
 package com.txd.project.service.impl;
 
-import static com.txd.project.constant.UserConstant.USER_LOGIN_STATE;
-
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,15 +16,22 @@ import com.txd.project.model.vo.LoginUserVO;
 import com.txd.project.model.vo.UserVO;
 import com.txd.project.service.UserService;
 import com.txd.project.utils.SqlUtils;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.txd.project.constant.RedisConstant.CAPTCHA_CACHE_KEY;
+import static com.txd.project.constant.UserConstant.USER_LOGIN_STATE;
+import static com.txd.project.service.impl.SmsServiceImpl.isPhoneValid;
 
 /**
  * 用户服务实现
@@ -40,6 +45,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 盐值，混淆密码
      */
     private static final String SALT = "txd";
+
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -109,6 +117,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         // 3. 记录用户的登录态
+        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        return this.getLoginUserVO(user);
+    }
+
+    @Override
+    public LoginUserVO loginWithSms(String phone, String captcha, HttpServletRequest request) {
+        // 1. 校验
+        if (StringUtils.isAnyBlank(phone, captcha)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+        }
+        if (!isPhoneValid(phone)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "号码格式错误");
+        }
+        // 2.校验验证码是否正确
+        String serverCaptcha = redisTemplate.opsForValue().get(CAPTCHA_CACHE_KEY + phone);
+        if (!captcha.equals(serverCaptcha)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码错误");
+        }
+        redisTemplate.delete(CAPTCHA_CACHE_KEY + phone);
+        // 3. 查询用户是否存在
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone);
+        User user = this.baseMapper.selectOne(queryWrapper);
+        // 用户不存在
+        if (user == null) {
+            // 方案一
+            log.info("user login failed, userAccount cannot match userPassword");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在，请先注册");
+        }
+        // 4. 记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
         return this.getLoginUserVO(user);
     }

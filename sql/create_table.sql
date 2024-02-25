@@ -12,6 +12,7 @@ create table if not exists user
     userName     varchar(256)                           null comment '用户昵称',
     userAccount  varchar(256)                           not null comment '账号',
     userAvatar   varchar(1024)                          null comment '用户头像',
+    phone        char(11)                               not null comment '电话号码',
     gender       tinyint                                null comment '性别',
     userRole     varchar(256) default 'user'            not null comment '用户角色：user / admin',
     userPassword varchar(512)                           not null comment '密码',

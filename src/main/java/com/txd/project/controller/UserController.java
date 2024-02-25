@@ -10,27 +10,19 @@ import com.txd.project.common.ResultUtils;
 import com.txd.project.constant.UserConstant;
 import com.txd.project.exception.BusinessException;
 import com.txd.project.exception.ThrowUtils;
-import com.txd.project.model.dto.user.UserAddRequest;
-import com.txd.project.model.dto.user.UserLoginRequest;
-import com.txd.project.model.dto.user.UserQueryRequest;
-import com.txd.project.model.dto.user.UserRegisterRequest;
-import com.txd.project.model.dto.user.UserUpdateMyRequest;
-import com.txd.project.model.dto.user.UserUpdateRequest;
+import com.txd.project.model.dto.user.*;
 import com.txd.project.model.vo.LoginUserVO;
 import com.txd.project.model.vo.UserVO;
+import com.txd.project.service.SmsService;
 import com.txd.project.service.UserService;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户接口
@@ -43,6 +35,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private SmsService smsService;
 
     // region 登录相关
 
@@ -68,7 +63,7 @@ public class UserController {
     }
 
     /**
-     * 用户登录
+     * 用户账号密码登录
      *
      * @param userLoginRequest
      * @param request
@@ -88,6 +83,37 @@ public class UserController {
         return ResultUtils.success(loginUserVO);
     }
 
+    /**
+     * 发送短信验证码
+     * @param phone
+     * @return
+     */
+    @GetMapping("/smsCaptcha")
+    public BaseResponse<String> smsCaptcha(@RequestParam String phone){
+        smsService.sendSmsCaptcha(phone);
+        // 异步发送验证码，这里直接返回成功即可
+        return ResultUtils.success("验证码已发送！");
+    }
+
+    /**
+     * 用户短信登录
+     * @param userLoginRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/loginWithSms")
+    public BaseResponse<LoginUserVO> loginWithSms(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
+        if (userLoginRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String phone = userLoginRequest.getPhone();
+        String captcha = userLoginRequest.getCaptcha();
+        if (StringUtils.isAnyBlank(phone, captcha)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        LoginUserVO loginUserVO = userService.loginWithSms(phone, captcha, request);
+        return ResultUtils.success(loginUserVO);
+    }
 
     /**
      * 用户注销

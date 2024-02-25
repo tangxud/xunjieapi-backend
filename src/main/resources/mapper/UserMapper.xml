@@ -11,6 +11,7 @@
             <result property="accessKey" column="accessKey" jdbcType="VARCHAR"/>
             <result property="secretKey" column="secretKey" jdbcType="VARCHAR"/>
             <result property="userName" column="userName" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="CHAR"/>
             <result property="userAvatar" column="userAvatar" jdbcType="VARCHAR"/>
             <result property="userProfile" column="userProfile" jdbcType="VARCHAR"/>
             <result property="userRole" column="userRole" jdbcType="VARCHAR"/>
@@ -20,7 +21,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,userAccount,userPassword,accessKey,secretKey,userName,
+        id,userAccount,userPassword,accessKey,secretKey,userName,phone
         userAvatar,userProfile,userRole,
         createTime,updateTime,isDelete
     </sql>

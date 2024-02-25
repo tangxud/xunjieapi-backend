@@ -6,8 +6,9 @@ import com.txd.common.core.model.entity.User;
 import com.txd.project.model.dto.user.UserQueryRequest;
 import com.txd.project.model.vo.LoginUserVO;
 import com.txd.project.model.vo.UserVO;
-import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户服务
@@ -34,6 +35,8 @@ public interface UserService extends IService<User> {
      * @return 脱敏后的用户信息
      */
     LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
+
+    LoginUserVO loginWithSms(String phone, String captcha, HttpServletRequest request);
 
     /**
      * 获取当前登录用户

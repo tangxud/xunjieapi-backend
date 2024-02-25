@@ -1,7 +1,8 @@
 package com.txd.project.model.dto.user;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 用户登录请求
@@ -15,4 +16,8 @@ public class UserLoginRequest implements Serializable {
     private String userAccount;
 
     private String userPassword;
+
+    private String phone;
+
+    private String captcha;
 }
