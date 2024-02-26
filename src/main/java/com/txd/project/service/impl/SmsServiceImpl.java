@@ -7,7 +7,7 @@ import com.txd.project.service.SmsService;
 import com.txd.project.utils.MessageTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ import static com.txd.project.constant.RedisConstant.SMS_CODE_EXPIRATION_SECONDS
 @Slf4j
 public class SmsServiceImpl implements SmsService {
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private MessageTemplate messageTemplate;
@@ -86,7 +86,7 @@ public class SmsServiceImpl implements SmsService {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "短信发送频繁，请稍后再试");
         }
         // 先判断redis中是否有生效的验证码，有就发送原验证码
-        String captcha = (String) redisTemplate.opsForValue().get(CAPTCHA_CACHE_KEY + phone);
+        String captcha = (String) stringRedisTemplate.opsForValue().get(CAPTCHA_CACHE_KEY + phone);
         // redis中没有就生成新的随机验证码（这里简化为6位数字）
         if (StringUtils.isEmpty(captcha)) {
             captcha = RandomUtil.randomNumbers(6);
@@ -95,7 +95,7 @@ public class SmsServiceImpl implements SmsService {
             // 发送验证码
             messageTemplate.doSendSMSCode(phone, captcha);
             // 将验证码缓存入redis,有效期5 * 60秒
-            redisTemplate.opsForValue().set(CAPTCHA_CACHE_KEY + phone, captcha, SMS_CODE_EXPIRATION_SECONDS, TimeUnit.SECONDS);
+            stringRedisTemplate.opsForValue().set(CAPTCHA_CACHE_KEY + phone, captcha, SMS_CODE_EXPIRATION_SECONDS, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("【发送验证码失败】" + e.getMessage());
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "验证码获取失败");
@@ -104,9 +104,10 @@ public class SmsServiceImpl implements SmsService {
 
     /**
      * 判断phoneNumber是否具备发送短信的条件
-     * 1. 一分钟只能发一个
-     * 2. 一小时只能发五条
-     * 3. 一天只能发10条
+     * 1. 如果号码不存在直接快速失败
+     * 2. 一分钟只能发一个
+     * 3. 一小时只能发五条
+     * 4. 一天只能发10条
      * @param phoneNumber 电话号码
      * @return
      */
@@ -116,7 +117,7 @@ public class SmsServiceImpl implements SmsService {
         List<String> keys = Collections.singletonList(phoneNumber);
         String currentTimeArg = String.valueOf(System.currentTimeMillis() / 1000);
         // 执行 Lua 脚本，这里将 currentTimeArg 作为参数传递
-        Long result = redisTemplate.execute(script, keys, currentTimeArg);
+        Long result = stringRedisTemplate.execute(script, keys, currentTimeArg);
         // 根据 Lua 脚本的返回值判断是否可以发送短信
         return result != null && result == 1;
     }

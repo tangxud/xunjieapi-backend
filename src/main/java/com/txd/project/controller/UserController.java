@@ -92,7 +92,7 @@ public class UserController {
     public BaseResponse<String> smsCaptcha(@RequestParam String phone){
         smsService.sendSmsCaptcha(phone);
         // 异步发送验证码，这里直接返回成功即可
-        return ResultUtils.success("验证码已发送！");
+        return ResultUtils.success("验证码发送成功！");
     }
 
     /**
