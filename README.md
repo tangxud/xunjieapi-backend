@@ -1,165 +1,85 @@
-# SpringBoot 项目初始模板
+# 迅捷API开放调用平台
 
-> 作者：[程序员鱼皮](https://github.com/liyupi)
-> 仅分享于 [编程导航知识星球](https://yupi.icu)
+> 项目还在不断完善优化中...
 
-基于 Java SpringBoot 的项目初始模板，整合了常用框架和主流业务的示例代码。
+迅捷API开放调用平台是一个基于 React、Spring Boot、Dubbo 和 Gateway 构建的API接口开放平台。它提供了管理员接入和发布接口、可视化接口调用情况的功能，同时也允许用户开通接口调用权限、浏览接口及在线调试，并通过客户端SDK轻松调用接口。
 
-只需 1 分钟即可完成内容网站的后端！！！大家还可以在此基础上快速开发自己的项目。
+## 功能特点
 
-[toc]
+- **管理员功能：**
+    - 接入和发布接口：管理员可以轻松接入新的接口，并将其发布到平台供用户调用。
+    - 可视化接口调用情况：管理员可以查看各接口的调用情况，包括调用次数、成功率等统计信息。
 
-## 模板特点
+- **用户功能：**
+    - 开通接口调用权限：用户可以申请开通需要调用的接口权限。（待开发，默认全部都可调用
+    - 浏览接口：用户可以浏览平台上已经接入的接口列表，并查看相关文档。
+    - 在线调试：用户可以在平台上进行接口调试，验证接口的正确性和返回结果。
+    - 客户端SDK支持：平台提供客户端SDK，用户可以轻松集成到自己的应用中，快速调用接口。
 
-### 主流框架 & 特性
+## 技术栈
 
-- Spring Boot 2.7.x（贼新）
-- Spring MVC
-- MyBatis + MyBatis Plus 数据访问（开启分页）
-- Spring Boot 调试工具和项目处理器
-- Spring AOP 切面编程
-- Spring Scheduler 定时任务
-- Spring 事务注解
+### 前端技术栈
 
-### 数据存储
-
-- MySQL 数据库
-- Redis 内存数据库
-- Elasticsearch 搜索引擎
-- 腾讯云 COS 对象存储
-
-### 工具类
-
-- Easy Excel 表格处理
-- Hutool 工具库
-- Gson 解析库
-- Apache Commons Lang3 工具类
-- Lombok 注解
-
-### 业务特性
-
-- Spring Session Redis 分布式登录
-- 全局请求响应拦截器（记录日志）
-- 全局异常处理器
-- 自定义错误码
-- 封装通用响应类
-- Swagger + Knife4j 接口文档
-- 自定义权限注解 + 全局校验
-- 全局跨域处理
-- 长整数丢失精度解决
-- 多环境配置
+- 开发框架：React、Umi
+- 脚手架：Ant Design Pro
+- 组件库：Ant Design、Ant Design Components
+- 语法扩展：TypeScript、Less
+- 打包工具：Webpack
+- 代码规范：ESLint、StyleLint、Prettier
 
 
-## 业务功能
 
-- 提供示例 SQL（用户、帖子、帖子点赞、帖子收藏表）
-- 用户登录、注册、注销、更新、检索、权限管理
-- 帖子创建、删除、编辑、更新、数据库检索、ES 灵活检索
-- 帖子点赞、取消点赞
-- 帖子收藏、取消收藏、检索已收藏帖子
-- 帖子全量同步 ES、增量同步 ES 定时任务
-- 支持微信开放平台登录
-- 支持微信公众号订阅、收发消息、设置菜单
-- 支持分业务的文件上传
+### 后端技术栈
 
-### 单元测试
+- 主语言：Java
+- 框架：SpringBoot 2.7.0、Mybatis-plus、Spring Cloud
+- 数据库：Mysql8.0、Redis
+- 中间件：RabbitMQ（还未引入）
+- 注册中心：Nacos
+- 服务调用：Dubbo
+- 网关：Spring Cloud Gateway
 
-- JUnit5 单元测试
-- 示例单元测试类
-
-### 架构设计
-
-- 合理分层
+- 负载均衡：Spring cloud Loadbalancer（还未引入）
 
 
-## 快速上手
 
-> 所有需要修改的地方鱼皮都标记了 `todo`，便于大家找到修改的位置~
+## 功能模块
 
-### MySQL 数据库
+已完成 (✔)
+未完成 (✘)
 
-1）修改 `application.yml` 的数据库配置为你自己的：
-
-```yml
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/xunjieapi
-    username: root
-    password: 123456
-```
-
-2）执行 `sql/create_table.sql` 中的数据库语句，自动创建库表
-
-3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
-
-![](doc/swagger.png)
-
-### Redis 分布式登录
-
-1）修改 `application.yml` 的 Redis 配置为你自己的：
-
-```yml
-spring:
-  redis:
-    database: 1
-    host: localhost
-    port: 6379
-    timeout: 5000
-    password: 123456
-```
-
-2）修改 `application.yml` 中的 session 存储方式：
-
-```yml
-spring:
-  session:
-    store-type: redis
-```
-
-3）移除 `MainApplication` 类开头 `@SpringBootApplication` 注解内的 exclude 参数：
-
-修改前：
-
-```java
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
-```
-
-修改后：
+- 用户、管理员
+    - 登录注册 (✔)
+        - 短信验证 (✔)
+    - 个人主页 (✘)
+    - 设置个人信息（🚀，因为用户信息模块并不是本项目重点，优先级较后 (✘)
+    - 管理员：接口管理  (✔)
+    - 管理员：接口分析、订单分析   (✔)
+    - 管理员：接口审核（🚀）(✔)
+- 接口
+    - 浏览接口信息  (✔)
+    - 在线调用接口  (✔)
+    - 接口搜索 (✘)
+    - 购买接口 (✘)
+    - 下载SDK调用接口 (✘)
+- 订单
+    - 创建订单 (✘)
+    - 支付宝沙箱支付 (✘)
 
 
-```java
-@SpringBootApplication
-```
 
-### Elasticsearch 搜索引擎
+#### 后端模块
 
-1）修改 `application.yml` 的 Elasticsearch 配置为你自己的：
+- xunjieapi-backend：后端服务，提供用户、接口等基本操作
+- xunjieapi-common：项目公共模块，包含一些公用的实体类，远程调用接口
+- xunjieapi-gateway：api网关，整个后端的入口，作服务转发、用户鉴权、统一日志、服务接口调用计数
+- xunjieapi-interface：平台提供的接口服务，目前只有简单的几个接口，大家可以自行拓展
+- xunjieapi-client-sdk：提供给开发者的SDK
 
-```yml
-spring:
-  elasticsearch:
-    uris: http://localhost:9200
-    username: root
-    password: 123456
-```
 
-2）复制 `sql/post_es_mapping.json` 文件中的内容，通过调用 Elasticsearch 的接口或者 Kibana Dev Tools 来创建索引（相当于数据库建表）
 
-```
-PUT post_v1
-{
- 参数见 sql/post_es_mapping.json 文件
-}
-```
+## 系统架构
+> 仅供参考
 
-这步不会操作的话需要补充下 Elasticsearch 的知识，或者自行百度一下~
+![](img/迅捷API接口平台架构.png)
 
-3）开启同步任务，将数据库的帖子同步到 Elasticsearch
-
-找到 job 目录下的 `FullSyncPostToEs` 和 `IncSyncPostToEs` 文件，取消掉 `@Component` 注解的注释，再次执行程序即可触发同步：
-
-```java
-// todo 取消注释开启任务
-//@Component
-```
