@@ -1,0 +1,12 @@
+[submodule "xunjieapi-client-sdk"]
+	path = xunjieapi-client-sdk
+	url = .\\xunjieapi-client-sdk
+[submodule "xunjieapi-common"]
+	path = xunjieapi-common
+	url = .\\xunjieapi-common\\
+[submodule "xunjieapi-gateway"]
+	path = xunjieapi-gateway
+	url = .\\xunjieapi-gateway\\
+[submodule "xunjieapi-interface"]
+	path = xunjieapi-interface
+	url = .\\xunjieapi-interface
