@@ -1,6 +1,8 @@
 # 迅捷API开放调用平台
 
 > 项目还在不断完善优化中...
+> Java + React 全栈项目，包括网站前台+管理员后台，感谢鱼厂创始人提供的项目基础框架，我也是在此基础上作拓展
+> 项目后端开源代码：https://github.com/tangxud/xunjieapi-backend
 
 迅捷API开放调用平台是一个基于 React、Spring Boot、Dubbo 和 Gateway 构建的API接口开放平台。它提供了管理员接入和发布接口、可视化接口调用情况的功能，同时也允许用户开通接口调用权限、浏览接口及在线调试，并通过客户端SDK轻松调用接口。
 
